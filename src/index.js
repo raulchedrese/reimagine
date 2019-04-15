@@ -1,9 +1,17 @@
-import React, {Component} from 'react'
+import React, { useState } from "react";
 
-export default class extends Component {
-  render() {
-    return <div>
-      <h2>Welcome to React components</h2>
+import ImageUploader from "./ImageUploader";
+import ImageWindow from "./ImageWindow";
+
+export default function ImageCrop() {
+  const [imageSource, setImageSource] = useState(null);
+  return (
+    <div>
+      {imageSource === null ? (
+        <ImageUploader setImageSource={setImageSource} />
+      ) : (
+        <ImageWindow imageSource={imageSource} />
+      )}
     </div>
-  }
+  );
 }

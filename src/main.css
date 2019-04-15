@@ -1,0 +1,14 @@
+.image-window {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  cursor: move;
+  border-radius: 50%;
+}
+
+.editable-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

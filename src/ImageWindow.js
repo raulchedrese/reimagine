@@ -3,6 +3,24 @@ import "./main.css";
 
 const CONTAINER_WIDTH = "200";
 const CONTAINER_HEIGHT = "200";
+
+const scaleImage = ([width, height], scaleFactor, minScale) => {
+  if (scaleFactor < minScale) {
+    return [width * minScale, height * minScale];
+  }
+
+  return [width * scaleFactor, height * scaleFactor];
+};
+
+const translateImage = ([x, y], [x0, y0]) => [x + x0, y + y0];
+
+const getMinScale = (naturalWidth, naturalHeight) => {
+  return Math.max(
+    CONTAINER_WIDTH / naturalWidth,
+    CONTAINER_HEIGHT / naturalHeight
+  );
+};
+
 export default function ImageWindow({ imageSource }) {
   const imageEl = useRef(null);
   const windowEl = useRef(null);
@@ -16,29 +34,25 @@ export default function ImageWindow({ imageSource }) {
   });
 
   const handleSizeChange = e => {
-    const scale = e.target.value / 100;
-
-    setScale(scale);
+    const scaleFactor = e.target.value / 100;
+    setScale(scaleFactor);
   };
 
-  let imageWidth = 0;
-  let imageHeight = 0;
+  let imageSize = [];
+  let minScale = 0;
 
   if (imageEl.current) {
-    const minScale = Math.max(
-      200 / imageEl.current.naturalWidth,
-      200 / imageEl.current.naturalHeight
+    minScale = getMinScale(
+      imageEl.current.naturalWidth,
+      imageEl.current.naturalHeight
     );
-    console.log(minScale);
-    imageWidth =
-      scale > minScale
-        ? imageEl.current.naturalWidth * scale
-        : imageEl.current.naturalWidth * minScale;
-    imageHeight =
-      scale > minScale
-        ? imageEl.current.naturalHeight * scale
-        : imageEl.current.naturalHeight * minScale;
+    imageSize = scaleImage(
+      [imageEl.current.naturalWidth, imageEl.current.naturalHeight],
+      scale,
+      minScale
+    );
   }
+  console.log(imageSize);
   return (
     <div>
       <div
@@ -64,10 +78,15 @@ export default function ImageWindow({ imageSource }) {
             return;
           }
           event.preventDefault();
-          windowEl.current.scrollLeft =
-            panningPosition.offsetX + (panningPosition.x - event.clientX);
-          windowEl.current.scrollTop =
-            panningPosition.offsetY + (panningPosition.y - event.clientY);
+          const translatedImage = translateImage(
+            [panningPosition.offsetX, panningPosition.offsetY],
+            [
+              panningPosition.x - event.clientX,
+              panningPosition.y - event.clientY
+            ]
+          );
+          windowEl.current.scrollLeft = translatedImage[0];
+          windowEl.current.scrollTop = translatedImage[1];
         }}
       >
         <img
@@ -76,12 +95,12 @@ export default function ImageWindow({ imageSource }) {
           draggable="false"
           className="editable-image"
           style={{
-            width: imageWidth,
-            height: imageHeight
+            width: `${imageSize[0]}px`,
+            height: `${imageSize[1]}px`
           }}
         />
       </div>
-      <input type="range" onChange={handleSizeChange} />
+      <input type="range" min={minScale * 100} onChange={handleSizeChange} />
     </div>
   );
 }

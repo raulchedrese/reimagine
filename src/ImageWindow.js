@@ -26,7 +26,8 @@ const getMinScale = (naturalWidth, naturalHeight) => {
 export default function ImageWindow({
   imageSource,
   setImageSource,
-  setIsEditing
+  setIsEditing,
+  setImageDimensions
 }) {
   const imageEl = useRef(null);
   const windowEl = useRef(null);
@@ -129,7 +130,14 @@ export default function ImageWindow({
       <button
         className="action-button"
         style={{ right: 0 }}
-        onClick={() => setIsEditing(false)}
+        onClick={() => {
+          setImageDimensions({
+            left: windowEl.current.scrollLeft,
+            top: windowEl.current.scrollTop,
+            scale: scale
+          });
+          setIsEditing(false);
+        }}
       >
         <SaveIcon />
       </button>

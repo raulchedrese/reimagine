@@ -1,16 +1,13 @@
 import React, { useRef, useState } from "react";
 
+const createFileURL = file => window.URL.createObjectURL(file);
+
 export default function ImageUploader({ setImageSource }) {
   const fileInput = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
 
-  const handleImageChange = () => {
-    const selectedFile = fileInput.current.files[0];
-    const imageSource = window.URL.createObjectURL(selectedFile);
-    const image = new Image();
-    image.src = imageSource;
-    setImageSource(imageSource);
-  };
+  const handleImageChange = () =>
+    setImageSource(createFileURL(fileInput.current.files[0]));
 
   let classes = "drop-area";
   if (isHovering) {
@@ -23,12 +20,7 @@ export default function ImageUploader({ setImageSource }) {
         onDrop={e => {
           e.preventDefault();
           e.stopPropagation();
-          let dt = e.dataTransfer;
-          let files = dt.files;
-          const imageSource = window.URL.createObjectURL(files[0]);
-          const image = new Image();
-          image.src = imageSource;
-          setImageSource(imageSource);
+          setImageSource(createFileURL(e.dataTransfer.files[0]));
         }}
         onDragEnter={e => {
           e.preventDefault();

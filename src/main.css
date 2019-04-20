@@ -5,12 +5,24 @@
   overflow: hidden;
   cursor: move;
   border-radius: 50%;
+  border: 4px solid #d8dee9;
 }
 
 .editable-image {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.action-button {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 10px;
+  border: 2px solid #d8dee9;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .drop-area {
@@ -31,6 +43,10 @@
 
 .drop-area--hovering {
   background-color: #a3be8c;
+}
+
+.scale-slider {
+  margin-top: 20px;
 }
 
 #uploadInput:hover {

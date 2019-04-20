@@ -1,4 +1,6 @@
 import React, { useState, useRef } from "react";
+import DeleteIcon from "./DeleteIcon";
+import SaveIcon from "./SaveIcon";
 import "./main.css";
 
 const CONTAINER_WIDTH = "200";
@@ -58,9 +60,14 @@ export default function ImageWindow({
   }
   console.log(imageSize);
   return (
-    <div>
-      <button onClick={() => setImageSource(null)}>Delete</button>
-      <button onClick={() => setIsEditing(false)}>Save</button>
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        width: "208px"
+      }}
+    >
       <div
         ref={windowEl}
         className="image-window"
@@ -106,7 +113,26 @@ export default function ImageWindow({
           }}
         />
       </div>
-      <input type="range" min={minScale * 100} onChange={handleSizeChange} />
+      <input
+        className="scale-slider"
+        type="range"
+        min={minScale * 100}
+        onChange={handleSizeChange}
+      />
+      <button
+        className="action-button"
+        style={{ left: 0 }}
+        onClick={() => setImageSource(null)}
+      >
+        <DeleteIcon />
+      </button>
+      <button
+        className="action-button"
+        style={{ right: 0 }}
+        onClick={() => setIsEditing(false)}
+      >
+        <SaveIcon />
+      </button>
     </div>
   );
 }

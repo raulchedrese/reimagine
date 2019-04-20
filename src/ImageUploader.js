@@ -8,7 +8,6 @@ export default function ImageUploader({ setImageSource }) {
     const imageSource = window.URL.createObjectURL(selectedFile);
     const image = new Image();
     image.src = imageSource;
-    console.log(image.width);
     setImageSource(imageSource);
   };
   return (

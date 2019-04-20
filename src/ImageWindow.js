@@ -21,7 +21,11 @@ const getMinScale = (naturalWidth, naturalHeight) => {
   );
 };
 
-export default function ImageWindow({ imageSource }) {
+export default function ImageWindow({
+  imageSource,
+  setImageSource,
+  setIsEditing
+}) {
   const imageEl = useRef(null);
   const windowEl = useRef(null);
   const [scale, setScale] = useState(0.5);
@@ -55,6 +59,8 @@ export default function ImageWindow({ imageSource }) {
   console.log(imageSize);
   return (
     <div>
+      <button onClick={() => setImageSource(null)}>Delete</button>
+      <button onClick={() => setIsEditing(false)}>Save</button>
       <div
         ref={windowEl}
         className="image-window"

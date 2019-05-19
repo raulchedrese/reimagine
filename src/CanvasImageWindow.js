@@ -6,6 +6,13 @@ import "./main.css";
 const CONTAINER_WIDTH = "200";
 const CONTAINER_HEIGHT = "200";
 
+const getMinScale = (naturalWidth, naturalHeight) => {
+  return Math.max(
+    CONTAINER_WIDTH / naturalWidth,
+    CONTAINER_HEIGHT / naturalHeight
+  );
+};
+
 export default function CanvasImageWindow({
   imageSource,
   clearImage,
@@ -18,6 +25,7 @@ export default function CanvasImageWindow({
   const [image, setImage] = useState(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     const ctx = imageEl.current.getContext("2d");
@@ -25,7 +33,23 @@ export default function CanvasImageWindow({
     image.src = imageSource;
 
     image.onload = () => {
-      ctx.drawImage(image, 0, 0);
+      const aspectRatio = image.naturalWidth / image.naturalHeight;
+      console.log(aspectRatio);
+      let initialSize = null;
+      if (image.naturalWidth >= image.naturalHeight) {
+        initialSize = {
+          width: CONTAINER_HEIGHT * aspectRatio,
+          height: CONTAINER_HEIGHT
+        };
+      } else {
+        initialSize = {
+          width: CONTAINER_WIDTH,
+          height: CONTAINER_WIDTH / aspectRatio
+        };
+      }
+      console.log(initialSize);
+      ctx.drawImage(image, 0, 0, initialSize.width, initialSize.height);
+      setImageSize(initialSize);
     };
     setImage(image);
   }, []);
@@ -79,7 +103,9 @@ export default function CanvasImageWindow({
           ctx.drawImage(
             image,
             imagePosition.x + (event.clientX - dragStart.x),
-            imagePosition.y + (event.clientY - dragStart.y)
+            imagePosition.y + (event.clientY - dragStart.y),
+            imageSize.width,
+            imageSize.height
           );
         }}
       >

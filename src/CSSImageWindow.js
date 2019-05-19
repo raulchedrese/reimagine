@@ -23,7 +23,7 @@ const getMinScale = (naturalWidth, naturalHeight) => {
   );
 };
 
-export default function ImageWindow({
+export default function CSSImageWindow({
   imageSource,
   clearImage,
   setIsEditing,
@@ -59,7 +59,8 @@ export default function ImageWindow({
       minScale
     );
   }
-  console.log(imageSize);
+  console.log("X: " + panningPosition.offsetX);
+  console.log("Y: " + panningPosition.offsetY);
   return (
     <div
       style={{
@@ -81,8 +82,8 @@ export default function ImageWindow({
           setPanningPosition({
             x: event.clientX,
             y: event.clientY,
-            offsetX: windowEl.current.scrollLeft,
-            offsetY: windowEl.current.scrollTop
+            offsetX: event.clientX,
+            offsetY: event.clientY
           });
         }}
         onMouseUp={() => setIsPanning(false)}
@@ -92,15 +93,21 @@ export default function ImageWindow({
             return;
           }
           event.preventDefault();
-          const translatedImage = translateImage(
-            [panningPosition.offsetX, panningPosition.offsetY],
-            [
-              panningPosition.x - event.clientX,
-              panningPosition.y - event.clientY
-            ]
+          //   const translatedImage = translateImage(
+          //     [panningPosition.offsetX, panningPosition.offsetY],
+          //     [
+          //       panningPosition.x - event.clientX,
+          //       panningPosition.y - event.clientY
+          //     ]
+          //   );
+          setPanningPosition(
+            Object.assign({}, panningPosition, {
+              offsetX: event.clientX,
+              offsetY: event.clientY
+            })
           );
-          windowEl.current.scrollLeft = translatedImage[0];
-          windowEl.current.scrollTop = translatedImage[1];
+          //   windowEl.current.scrollLeft = translatedImage[0];
+          //   windowEl.current.scrollTop = translatedImage[1];
         }}
       >
         <img
@@ -109,8 +116,9 @@ export default function ImageWindow({
           draggable="false"
           className="editable-image"
           style={{
-            width: `${imageSize[0]}px`,
-            height: `${imageSize[1]}px`
+            transform: `scale(${scale}) translate(${
+              panningPosition.offsetX
+            }px, ${panningPosition.offsetY}px)`
           }}
         />
       </div>

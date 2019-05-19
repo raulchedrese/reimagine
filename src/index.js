@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import ImageUploader from "./ImageUploader";
-import ImageWindow from "./ImageWindow";
+import CanvasImageWindow from "./CanvasImageWindow";
 import ImagePreview from "./ImagePreview";
 import EditIcon from "./EditIcon";
 
@@ -33,9 +33,9 @@ export default function ImageCrop() {
 
   return (
     <div>
-      <ImageWindow
+      <CanvasImageWindow
         imageSource={imageSource}
-        setImageSource={setImageSource}
+        clearImage={() => setImageSource(null)}
         setIsEditing={setIsEditing}
         setImageDimensions={setImageDimensions}
       />

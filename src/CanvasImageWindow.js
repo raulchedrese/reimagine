@@ -77,16 +77,28 @@ export default function CanvasImageWindow({
           setIsPanning(false);
           const rect = imageEl.current.getBoundingClientRect();
           setImagePosition({
-            x: imagePosition.x + (event.clientX - dragStart.x),
-            y: imagePosition.y + (event.clientY - dragStart.y)
+            x: Math.max(
+              Math.min(imagePosition.x + (event.clientX - dragStart.x), 0),
+              CONTAINER_WIDTH - imageSize.width
+            ),
+            y: Math.max(
+              Math.min(imagePosition.y + (event.clientY - dragStart.y), 0),
+              CONTAINER_HEIGHT - imageSize.height
+            )
           });
         }}
         onMouseLeave={() => {
           setIsPanning(false);
           const rect = imageEl.current.getBoundingClientRect();
           setImagePosition({
-            x: imagePosition.x + (event.clientX - dragStart.x),
-            y: imagePosition.y + (event.clientY - dragStart.y)
+            x: Math.max(
+              Math.min(imagePosition.x + (event.clientX - dragStart.x), 0),
+              CONTAINER_WIDTH - imageSize.width
+            ),
+            y: Math.max(
+              Math.min(imagePosition.y + (event.clientY - dragStart.y), 0),
+              CONTAINER_HEIGHT - imageSize.height
+            )
           });
         }}
         onMouseMove={event => {
@@ -102,8 +114,14 @@ export default function CanvasImageWindow({
           ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
           ctx.drawImage(
             image,
-            imagePosition.x + (event.clientX - dragStart.x),
-            imagePosition.y + (event.clientY - dragStart.y),
+            Math.max(
+              Math.min(imagePosition.x + (event.clientX - dragStart.x), 0),
+              CONTAINER_WIDTH - imageSize.width
+            ),
+            Math.max(
+              Math.min(imagePosition.y + (event.clientY - dragStart.y), 0),
+              CONTAINER_HEIGHT - imageSize.height
+            ),
             imageSize.width,
             imageSize.height
           );

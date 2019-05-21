@@ -134,8 +134,32 @@ export default function CanvasImageWindow({
       <input
         className="scale-slider"
         type="range"
-        min={0}
-        onChange={() => {}}
+        min={
+          image ? getMinScale(image.naturalWidth, image.naturalHeight) * 100 : 0
+        }
+        max={100}
+        onChange={e => {
+          console.log(e.target.value);
+          const ctx = imageEl.current.getContext("2d");
+          ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+          ctx.drawImage(
+            image,
+            Math.max(
+              Math.min(imagePosition.x, 0),
+              CONTAINER_WIDTH - imageSize.width
+            ),
+            Math.max(
+              Math.min(imagePosition.y, 0),
+              CONTAINER_HEIGHT - imageSize.height
+            ),
+            image.naturalWidth * (e.target.value / 100),
+            image.naturalHeight * (e.target.value / 100)
+          );
+          setImageSize({
+            width: image.naturalWidth * (e.target.value / 100),
+            height: image.naturalHeight * (e.target.value / 100)
+          });
+        }}
       />
       <button
         className="action-button"

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import CommonImageWindow from "./CommonImageWindow";
 import DeleteIcon from "./DeleteIcon";
 import SaveIcon from "./SaveIcon";
 import "./main.css";
@@ -26,32 +27,10 @@ export default function CanvasImageWindow({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [imageManager, setImageManager] = useState(null);
 
   useEffect(() => {
-    const ctx = imageEl.current.getContext("2d");
-    const image = new Image();
-    image.src = imageSource;
-
-    image.onload = () => {
-      const aspectRatio = image.naturalWidth / image.naturalHeight;
-      console.log(aspectRatio);
-      let initialSize = null;
-      if (image.naturalWidth >= image.naturalHeight) {
-        initialSize = {
-          width: CONTAINER_HEIGHT * aspectRatio,
-          height: CONTAINER_HEIGHT
-        };
-      } else {
-        initialSize = {
-          width: CONTAINER_WIDTH,
-          height: CONTAINER_WIDTH / aspectRatio
-        };
-      }
-      console.log(initialSize);
-      ctx.drawImage(image, 0, 0, initialSize.width, initialSize.height);
-      setImageSize(initialSize);
-    };
-    setImage(image);
+    setImageManager(new CommonImageWindow(imageEl.current, imageSource));
   }, []);
   return (
     <div
@@ -70,61 +49,16 @@ export default function CanvasImageWindow({
           height: `${CONTAINER_HEIGHT}px`
         }}
         onMouseDown={event => {
-          setIsPanning(true);
-          setDragStart({ x: event.clientX, y: event.clientY });
+          imageManager.startPan(event);
         }}
         onMouseUp={event => {
-          setIsPanning(false);
-          const rect = imageEl.current.getBoundingClientRect();
-          setImagePosition({
-            x: Math.max(
-              Math.min(imagePosition.x + (event.clientX - dragStart.x), 0),
-              CONTAINER_WIDTH - imageSize.width
-            ),
-            y: Math.max(
-              Math.min(imagePosition.y + (event.clientY - dragStart.y), 0),
-              CONTAINER_HEIGHT - imageSize.height
-            )
-          });
+          imageManager.endPan();
         }}
         onMouseLeave={() => {
-          setIsPanning(false);
-          const rect = imageEl.current.getBoundingClientRect();
-          setImagePosition({
-            x: Math.max(
-              Math.min(imagePosition.x + (event.clientX - dragStart.x), 0),
-              CONTAINER_WIDTH - imageSize.width
-            ),
-            y: Math.max(
-              Math.min(imagePosition.y + (event.clientY - dragStart.y), 0),
-              CONTAINER_HEIGHT - imageSize.height
-            )
-          });
+          imageManager.endPan();
         }}
         onMouseMove={event => {
-          if (!isPanning) {
-            return;
-          }
-          console.log({
-            x: event.clientX,
-            y: event.clientY
-          });
-          const ctx = imageEl.current.getContext("2d");
-          const rect = imageEl.current.getBoundingClientRect();
-          ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-          ctx.drawImage(
-            image,
-            Math.max(
-              Math.min(imagePosition.x + (event.clientX - dragStart.x), 0),
-              CONTAINER_WIDTH - imageSize.width
-            ),
-            Math.max(
-              Math.min(imagePosition.y + (event.clientY - dragStart.y), 0),
-              CONTAINER_HEIGHT - imageSize.height
-            ),
-            imageSize.width,
-            imageSize.height
-          );
+          imageManager.pan(event);
         }}
       >
         <canvas ref={imageEl} width={CONTAINER_WIDTH} height={CONTAINER_HEIGHT}>
@@ -134,31 +68,10 @@ export default function CanvasImageWindow({
       <input
         className="scale-slider"
         type="range"
-        min={
-          image ? getMinScale(image.naturalWidth, image.naturalHeight) * 100 : 0
-        }
+        min={imageManager ? imageManager.getMinScale() * 100 : 0}
         max={100}
         onChange={e => {
-          console.log(e.target.value);
-          const ctx = imageEl.current.getContext("2d");
-          ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-          ctx.drawImage(
-            image,
-            Math.max(
-              Math.min(imagePosition.x, 0),
-              CONTAINER_WIDTH - imageSize.width
-            ),
-            Math.max(
-              Math.min(imagePosition.y, 0),
-              CONTAINER_HEIGHT - imageSize.height
-            ),
-            image.naturalWidth * (e.target.value / 100),
-            image.naturalHeight * (e.target.value / 100)
-          );
-          setImageSize({
-            width: image.naturalWidth * (e.target.value / 100),
-            height: image.naturalHeight * (e.target.value / 100)
-          });
+          imageManager.scale(e.target.value / 100);
         }}
       />
       <button

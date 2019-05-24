@@ -22,16 +22,20 @@ export default function CanvasImageWindow({
 }) {
   const imageEl = useRef(null);
   const windowEl = useRef(null);
-  const [isPanning, setIsPanning] = useState(false);
-  const [image, setImage] = useState(null);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [imageManager, setImageManager] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    setImageManager(new CommonImageWindow(imageEl.current, imageSource));
+    const imageManager = new CommonImageWindow(
+      imageEl.current,
+      imageSource,
+      () => {
+        setImageLoaded(true);
+      }
+    );
+    setImageManager(imageManager);
   }, []);
+
   return (
     <div
       style={{

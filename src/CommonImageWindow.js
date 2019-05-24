@@ -9,8 +9,9 @@ const getMinScale = (naturalWidth, naturalHeight) => {
 };
 
 export default class CommonImageWindow {
-  constructor(canvas, imageSource) {
+  constructor(canvas, imageSource, imageLoadedCB) {
     this.imageSize = { width: 0, height: 0 };
+    this.imageNaturalSize = { width: 0, height: 0 };
     this.imagePosition = { x: 0, y: 0 };
     this.ctx = canvas.getContext("2d");
     this.isPanning = false;
@@ -22,6 +23,10 @@ export default class CommonImageWindow {
     this.image.src = imageSource;
 
     this.image.onload = () => {
+      this.imageNaturalSize = {
+        width: this.image.naturalWidth,
+        height: this.image.naturalHeight
+      };
       const aspectRatio = this.image.naturalWidth / this.image.naturalHeight;
       if (this.image.naturalWidth >= this.image.naturalHeight) {
         this.imageSize = {
@@ -34,6 +39,7 @@ export default class CommonImageWindow {
           height: CONTAINER_WIDTH / aspectRatio
         };
       }
+      imageLoadedCB();
       this.draw();
     };
   }
@@ -87,8 +93,6 @@ export default class CommonImageWindow {
     ) {
       return false;
     }
-    console.log("factor: " + factor);
-    console.log(getMinScale(this.image.naturalWidth, this.image.naturalHeight));
     this.imageSize = {
       width: this.image.naturalWidth * factor,
       height: this.image.naturalHeight * factor
@@ -97,7 +101,10 @@ export default class CommonImageWindow {
   }
 
   getMinScale() {
-    return getMinScale(this.image.naturalWidth, this.image.naturalHeight);
+    return getMinScale(
+      this.imageNaturalSize.width,
+      this.imageNaturalSize.height
+    );
   }
 
   draw() {

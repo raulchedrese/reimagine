@@ -24,16 +24,20 @@ export default function CanvasImageWindow({
   const windowEl = useRef(null);
   const [imageManager, setImageManager] = useState(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [scale, setScale] = useState(0);
 
   useEffect(() => {
-    const imageManager = new CommonImageWindow(
+    const newManager = new CommonImageWindow(
       imageEl.current,
       imageSource,
       () => {
         setImageLoaded(true);
       }
     );
-    setImageManager(imageManager);
+    newManager.handleScale(newScale => {
+      setScale(newScale * 100);
+    });
+    setImageManager(newManager);
   }, []);
 
   return (
@@ -74,6 +78,7 @@ export default function CanvasImageWindow({
         type="range"
         min={imageManager ? imageManager.getMinScale() * 100 : 0}
         max={100}
+        value={scale}
         onChange={e => {
           imageManager.scale(e.target.value / 100);
         }}

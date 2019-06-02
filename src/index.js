@@ -9,9 +9,12 @@ export default function ImageCrop() {
   const [imageSource, setImageSource] = useState(null);
   const [isEditing, setIsEditing] = useState(true);
   const [imageDimensions, setImageDimensions] = useState({
-    top: 0,
     left: 0,
-    scale: 1
+    top: 0,
+    width: 200,
+    height: 200,
+    scaledWitdh: 200,
+    scaledHeight: 200
   });
 
   if (!isEditing && imageSource !== null) {

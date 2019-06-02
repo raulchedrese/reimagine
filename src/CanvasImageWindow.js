@@ -85,11 +85,7 @@ export default function CanvasImageWindow({
         className="action-button"
         style={{ right: 0 }}
         onClick={() => {
-          setImageDimensions({
-            left: windowEl.current.scrollLeft,
-            top: windowEl.current.scrollTop,
-            scale: scale
-          });
+          setImageDimensions(imageManager.getImageSize());
           setIsEditing(false);
         }}
       >

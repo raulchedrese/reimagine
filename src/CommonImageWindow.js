@@ -100,6 +100,17 @@ export default class CommonImageWindow {
     return getMinScale(this.image.naturalWidth, this.image.naturalHeight);
   }
 
+  getImageSize() {
+    return {
+      left: this.imagePosition.x,
+      top: this.imagePosition.y,
+      width: CONTAINER_WIDTH,
+      height: CONTAINER_HEIGHT,
+      scaledWitdh: this.imageSize.width,
+      scaledHeight: this.imageSize.height
+    };
+  }
+
   draw() {
     this.ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
     this.ctx.drawImage(

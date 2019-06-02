@@ -8,20 +8,37 @@ const getMinScale = (naturalWidth, naturalHeight) => {
   );
 };
 
+const centerToOffset = (center, width, height) => ({
+  x: center.x - width / 2,
+  y: center.y - height / 2
+});
+
+// const offetToCenter = (x, y)
+
 export default class CommonImageWindow {
-  constructor(canvas, imageSource) {
+  constructor(canvas, imageSource, imageLoadedCB) {
     this.imageSize = { width: 0, height: 0 };
+    this.imageNaturalSize = {
+      width: 0,
+      height: 0
+    };
     this.imagePosition = { x: 0, y: 0 };
+    this.imageCenter = { x: 0, y: 0 };
     this.ctx = canvas.getContext("2d");
     this.isPanning = false;
     this.panStart = { x: 0, y: 0 };
     // The position of the image when a pan was started
     this.imagePositionStart = { x: 0, y: 0 };
+    this.onScale = null;
 
     this.image = new Image();
     this.image.src = imageSource;
 
     this.image.onload = () => {
+      this.imageNaturalSize = {
+        width: this.image.naturalWidth,
+        height: this.image.naturalHeight
+      };
       const aspectRatio = this.image.naturalWidth / this.image.naturalHeight;
       if (this.image.naturalWidth >= this.image.naturalHeight) {
         this.imageSize = {
@@ -34,13 +51,22 @@ export default class CommonImageWindow {
           height: CONTAINER_WIDTH / aspectRatio
         };
       }
+      this.imageCenter = { x: CONTAINER_WIDTH / 2, y: CONTAINER_HEIGHT / 2 };
+      imageLoadedCB();
       this.draw();
     };
   }
 
+  handleScale(callback) {
+    this.onScale = callback;
+  }
+
   startPan(event) {
     this.isPanning = true;
-    this.panStart = { x: event.clientX, y: event.clientY };
+    this.panStart = {
+      x: event.clientX,
+      y: event.clientY
+    };
     this.imagePositionStart = {
       x: this.imagePosition.x,
       y: this.imagePosition.y
@@ -55,10 +81,6 @@ export default class CommonImageWindow {
     if (!this.isPanning) {
       return;
     }
-    console.log({
-      x: event.clientX,
-      y: event.clientY
-    });
 
     this.imagePosition = {
       x: Math.max(
@@ -76,6 +98,7 @@ export default class CommonImageWindow {
         CONTAINER_HEIGHT - this.imageSize.height
       )
     };
+    this.imageCenter = { x: event.clientX, y: event.clientY };
 
     this.draw();
   }
@@ -87,17 +110,22 @@ export default class CommonImageWindow {
     ) {
       return false;
     }
-    console.log("factor: " + factor);
-    console.log(getMinScale(this.image.naturalWidth, this.image.naturalHeight));
     this.imageSize = {
       width: this.image.naturalWidth * factor,
       height: this.image.naturalHeight * factor
     };
+    // this.imagePosition = { x: , y: }
     this.draw();
+    if (this.onScale !== null) {
+      this.onScale(factor);
+    }
   }
 
   getMinScale() {
-    return getMinScale(this.image.naturalWidth, this.image.naturalHeight);
+    return getMinScale(
+      this.imageNaturalSize.width,
+      this.imageNaturalSize.height
+    );
   }
 
   getImageSize() {

@@ -22,16 +22,24 @@ export default function CanvasImageWindow({
 }) {
   const imageEl = useRef(null);
   const windowEl = useRef(null);
-  const [isPanning, setIsPanning] = useState(false);
-  const [image, setImage] = useState(null);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
   const [imageManager, setImageManager] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [scale, setScale] = useState(0);
 
   useEffect(() => {
-    setImageManager(new CommonImageWindow(imageEl.current, imageSource));
+    const newManager = new CommonImageWindow(
+      imageEl.current,
+      imageSource,
+      () => {
+        setImageLoaded(true);
+      }
+    );
+    newManager.handleScale(newScale => {
+      setScale(newScale * 100);
+    });
+    setImageManager(newManager);
   }, []);
+
   return (
     <div
       style={{
@@ -70,6 +78,7 @@ export default function CanvasImageWindow({
         type="range"
         min={imageManager ? imageManager.getMinScale() * 100 : 0}
         max={100}
+        value={scale}
         onChange={e => {
           imageManager.scale(e.target.value / 100);
         }}

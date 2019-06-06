@@ -9,8 +9,13 @@ const getMinScale = (naturalWidth, naturalHeight) => {
 };
 
 const centerToOffset = (center, width, height) => ({
-  x: center.x - width / 2,
-  y: center.y - height / 2
+  x: center.x - CONTAINER_WIDTH / 2,
+  y: center.y - CONTAINER_HEIGHT / 2
+});
+
+const offsetToCenter = (left, top) => ({
+  x: left + CONTAINER_WIDTH / 2,
+  y: top + CONTAINER_HEIGHT / 2
 });
 
 // const offetToCenter = (x, y)
@@ -110,9 +115,26 @@ export default class CommonImageWindow {
     ) {
       return false;
     }
+    console.log(this.imagePosition);
+    // The position of the center of the image before we scale it.
+    const preScaleImageCenter = offsetToCenter(
+      this.imagePosition.x,
+      this.imagePosition.y
+    );
+    console.log(preScaleImageCenter);
     this.imageSize = {
       width: this.image.naturalWidth * factor,
       height: this.image.naturalHeight * factor
+    };
+    const centerAdjustedPosition = centerToOffset(
+      preScaleImageCenter,
+      this.imageSize.width,
+      this.imageSize.height
+    );
+    console.log(centerAdjustedPosition);
+    this.imagePosition = {
+      x: centerAdjustedPosition.x,
+      y: centerAdjustedPosition.y
     };
     // this.imagePosition = { x: , y: }
     this.draw();

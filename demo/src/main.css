@@ -20,3 +20,17 @@ h5,
 h6 {
   color: #eceff4;
 }
+
+.container {
+  display: flex;
+  max-width: 500px;
+  margin-top: 20px;
+  padding: 20px;
+  color: #2e3440;
+  background-color: #eceff4;
+  border-radius: 2px;
+}
+
+dl {
+  margin-left: 20px;
+}

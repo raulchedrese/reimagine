@@ -10,6 +10,20 @@ class Demo extends Component {
       <div className="main">
         <h1>image-crop Demo</h1>
         <Example />
+
+        <div className="container">
+          <Example />
+          <div>
+            <dl>
+              <dt>First Name</dt>
+              <dd>Malcom</dd>
+              <dt>Last Name</dt>
+              <dd>Reynolds</dd>
+              <dt>Age</dt>
+              <dd>34</dd>
+            </dl>
+          </div>
+        </div>
       </div>
     );
   }

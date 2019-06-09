@@ -8,17 +8,7 @@ const getMinScale = (naturalWidth, naturalHeight) => {
   );
 };
 
-const centerToOffset = (center, width, height) => ({
-  x: center.x - CONTAINER_WIDTH / 2,
-  y: center.y - CONTAINER_HEIGHT / 2
-});
-
-const offsetToCenter = (left, top) => ({
-  x: left + CONTAINER_WIDTH / 2,
-  y: top + CONTAINER_HEIGHT / 2
-});
-
-// const offetToCenter = (x, y)
+const constrainPosition = (x, min) => Math.max(Math.min(x, 0), min);
 
 export default class CommonImageWindow {
   constructor(canvas, imageSource, imageLoadedCB) {
@@ -28,7 +18,6 @@ export default class CommonImageWindow {
       height: 0
     };
     this.imagePosition = { x: 0, y: 0 };
-    this.imageCenter = { x: 0, y: 0 };
     this.ctx = canvas.getContext("2d");
     this.isPanning = false;
     this.isScaling = false;
@@ -58,7 +47,6 @@ export default class CommonImageWindow {
           height: CONTAINER_WIDTH / aspectRatio
         };
       }
-      this.imageCenter = { x: CONTAINER_WIDTH / 2, y: CONTAINER_HEIGHT / 2 };
       imageLoadedCB();
       this.draw();
     };
@@ -90,22 +78,15 @@ export default class CommonImageWindow {
     }
 
     this.imagePosition = {
-      x: Math.max(
-        Math.min(
-          this.imagePositionStart.x + (event.clientX - this.panStart.x),
-          0
-        ),
+      x: constrainPosition(
+        this.imagePositionStart.x + (event.clientX - this.panStart.x),
         CONTAINER_WIDTH - this.imageSize.width
       ),
-      y: Math.max(
-        Math.min(
-          this.imagePositionStart.y + (event.clientY - this.panStart.y),
-          0
-        ),
+      y: constrainPosition(
+        this.imagePositionStart.y + (event.clientY - this.panStart.y),
         CONTAINER_HEIGHT - this.imageSize.height
       )
     };
-    this.imageCenter = { x: event.clientX, y: event.clientY };
 
     this.draw();
   }
@@ -130,13 +111,7 @@ export default class CommonImageWindow {
     ) {
       return false;
     }
-    console.log(this.imagePosition);
-    // The position of the center of the image before we scale it.
-    // const preScaleImageCenter = offsetToCenter(
-    //   this.imagePosition.x,
-    //   this.imagePosition.y
-    // );
-    // console.log(preScaleImageCenter);
+
     const newWidth = this.image.naturalWidth * factor;
     const newHeight = this.image.naturalHeight * factor;
 
@@ -144,28 +119,23 @@ export default class CommonImageWindow {
       width: newWidth,
       height: newHeight
     };
-    // const centerAdjustedPosition = centerToOffset(
-    //   preScaleImageCenter,
-    //   this.imageSize.width,
-    //   this.imageSize.height
-    // );
-
-    // console.log(centerAdjustedPosition);
-    // this.imagePosition = {
-    //   x: centerAdjustedPosition.x,
-    //   y: centerAdjustedPosition.y
-    // };
 
     // The ratio of the new width compared to the starting width
     const scaledFactorX = newWidth / this.scaleStart.width;
     const scaledFactorY = newHeight / this.scaleStart.height;
-    console.log({ scaleX: scaledFactorX, scaleY: scaledFactorY });
     this.imagePosition = {
-      x: (this.scaleStart.x - 100) * scaledFactorX + 100,
-      y: (this.scaleStart.y - 100) * scaledFactorY + 100
+      x: constrainPosition(
+        (this.scaleStart.x - CONTAINER_WIDTH / 2) * scaledFactorX +
+          CONTAINER_WIDTH / 2,
+        CONTAINER_WIDTH - this.imageSize.width
+      ),
+      y: constrainPosition(
+        (this.scaleStart.y - CONTAINER_HEIGHT / 2) * scaledFactorY +
+          CONTAINER_HEIGHT / 2,
+        CONTAINER_HEIGHT - this.imageSize.height
+      )
     };
-    // console.log(this.imag)
-    // this.imagePosition = { x: , y: }
+
     this.draw();
     if (this.onScale !== null) {
       this.onScale(factor);

@@ -31,7 +31,9 @@ export default class CommonImageWindow {
     this.imageCenter = { x: 0, y: 0 };
     this.ctx = canvas.getContext("2d");
     this.isPanning = false;
+    this.isScaling = false;
     this.panStart = { x: 0, y: 0 };
+    this.scaleStart = { x: 0, y: 0 };
     // The position of the image when a pan was started
     this.imagePositionStart = { x: 0, y: 0 };
     this.onScale = null;
@@ -108,6 +110,19 @@ export default class CommonImageWindow {
     this.draw();
   }
 
+  startScale() {
+    this.isScaling = true;
+    this.scaleStart = {
+      x: this.imagePosition.x,
+      y: this.imagePosition.y,
+      width: this.imageSize.width,
+      height: this.imageSize.height
+    };
+  }
+
+  stopScale() {
+    this.isScaling = false;
+  }
   // factor: percentage as decimal
   scale(factor) {
     if (
@@ -117,25 +132,39 @@ export default class CommonImageWindow {
     }
     console.log(this.imagePosition);
     // The position of the center of the image before we scale it.
-    const preScaleImageCenter = offsetToCenter(
-      this.imagePosition.x,
-      this.imagePosition.y
-    );
-    console.log(preScaleImageCenter);
+    // const preScaleImageCenter = offsetToCenter(
+    //   this.imagePosition.x,
+    //   this.imagePosition.y
+    // );
+    // console.log(preScaleImageCenter);
+    const newWidth = this.image.naturalWidth * factor;
+    const newHeight = this.image.naturalHeight * factor;
+
     this.imageSize = {
-      width: this.image.naturalWidth * factor,
-      height: this.image.naturalHeight * factor
+      width: newWidth,
+      height: newHeight
     };
-    const centerAdjustedPosition = centerToOffset(
-      preScaleImageCenter,
-      this.imageSize.width,
-      this.imageSize.height
-    );
-    console.log(centerAdjustedPosition);
+    // const centerAdjustedPosition = centerToOffset(
+    //   preScaleImageCenter,
+    //   this.imageSize.width,
+    //   this.imageSize.height
+    // );
+
+    // console.log(centerAdjustedPosition);
+    // this.imagePosition = {
+    //   x: centerAdjustedPosition.x,
+    //   y: centerAdjustedPosition.y
+    // };
+
+    // The ratio of the new width compared to the starting width
+    const scaledFactorX = newWidth / this.scaleStart.width;
+    const scaledFactorY = newHeight / this.scaleStart.height;
+    console.log({ scaleX: scaledFactorX, scaleY: scaledFactorY });
     this.imagePosition = {
-      x: centerAdjustedPosition.x,
-      y: centerAdjustedPosition.y
+      x: (-this.scaleStart.x - 100) * scaledFactorX + 100,
+      y: (-this.scaleStart.y - 100) * scaledFactorY + 100
     };
+    // console.log(this.imag)
     // this.imagePosition = { x: , y: }
     this.draw();
     if (this.onScale !== null) {

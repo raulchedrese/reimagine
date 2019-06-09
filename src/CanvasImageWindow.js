@@ -79,6 +79,12 @@ export default function CanvasImageWindow({
         min={imageManager ? imageManager.getMinScale() * 100 : 0}
         max={100}
         value={scale}
+        onMouseDown={e => {
+          imageManager.startScale();
+        }}
+        onMouseUp={e => {
+          imageManager.stopScale();
+        }}
         onChange={e => {
           imageManager.scale(e.target.value / 100);
         }}

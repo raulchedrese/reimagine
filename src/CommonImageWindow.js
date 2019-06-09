@@ -161,8 +161,8 @@ export default class CommonImageWindow {
     const scaledFactorY = newHeight / this.scaleStart.height;
     console.log({ scaleX: scaledFactorX, scaleY: scaledFactorY });
     this.imagePosition = {
-      x: (-this.scaleStart.x - 100) * scaledFactorX + 100,
-      y: (-this.scaleStart.y - 100) * scaledFactorY + 100
+      x: (this.scaleStart.x - 100) * scaledFactorX + 100,
+      y: (this.scaleStart.y - 100) * scaledFactorY + 100
     };
     // console.log(this.imag)
     // this.imagePosition = { x: , y: }

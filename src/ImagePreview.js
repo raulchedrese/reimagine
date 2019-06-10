@@ -2,9 +2,10 @@ import React from "react";
 import EditIcon from "./EditIcon";
 
 export default function ImagePreview({ imageSource, imageDimensions }) {
+  console.log(imageDimensions);
   return (
     <div>
-      <button>
+      <button className="action-button">
         <EditIcon />
       </button>
       <div
@@ -22,10 +23,10 @@ export default function ImagePreview({ imageSource, imageDimensions }) {
           draggable={false}
           style={{
             position: "absolute",
-            left: `-${imageDimensions.left}px`,
-            top: `-${imageDimensions.top}px`,
-            transformOrigin: "top left",
-            transform: `scale(${imageDimensions.scale})`
+            top: `${imageDimensions.top}px`,
+            left: `${imageDimensions.left}px`,
+            width: `${imageDimensions.scaledWidth}px`,
+            height: `${imageDimensions.scaledHeight}px`
           }}
         />
       </div>

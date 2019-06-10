@@ -12,13 +12,16 @@ const constrainPosition = (x, min) => Math.max(Math.min(x, 0), min);
 
 export default class CommonImageWindow {
   constructor(canvas, imageSource, imageLoadedCB) {
-    this.imageSize = { width: 0, height: 0 };
+    this.ctx = canvas.getContext("2d");
+    // Image state
     this.imageNaturalSize = {
       width: 0,
       height: 0
     };
+    this.imageSize = { width: 0, height: 0 };
     this.imagePosition = { x: 0, y: 0 };
-    this.ctx = canvas.getContext("2d");
+
+    // Window state
     this.isPanning = false;
     this.isScaling = false;
     this.panStart = { x: 0, y: 0 };

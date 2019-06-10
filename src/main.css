@@ -23,6 +23,7 @@
   border: 2px solid #d8dee9;
   border-radius: 50%;
   cursor: pointer;
+  z-index: 1;
 }
 
 .drop-area {

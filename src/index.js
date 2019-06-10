@@ -22,6 +22,7 @@ export default function ImageCrop() {
       <ImagePreview
         imageSource={imageSource}
         imageDimensions={imageDimensions}
+        startEditing={() => setIsEditing(true)}
       />
     );
   }

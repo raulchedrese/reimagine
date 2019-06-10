@@ -1,11 +1,22 @@
 import React from "react";
 import EditIcon from "./EditIcon";
 
-export default function ImagePreview({ imageSource, imageDimensions }) {
+export default function ImagePreview({
+  imageSource,
+  imageDimensions,
+  startEditing
+}) {
   console.log(imageDimensions);
   return (
-    <div>
-      <button className="action-button">
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        width: "208px"
+      }}
+    >
+      <button className="action-button" onClick={() => startEditing()}>
         <EditIcon />
       </button>
       <div

@@ -18,7 +18,8 @@ export default function CanvasImageWindow({
   imageSource,
   clearImage,
   setIsEditing,
-  setImageDimensions
+  setImageDimensions,
+  initialDimensions
 }) {
   const imageEl = useRef(null);
   const windowEl = useRef(null);
@@ -30,6 +31,7 @@ export default function CanvasImageWindow({
     const newManager = new CommonImageWindow(
       imageEl.current,
       imageSource,
+      initialDimensions,
       () => {
         setImageLoaded(true);
       }
@@ -37,6 +39,9 @@ export default function CanvasImageWindow({
     newManager.handleScale(newScale => {
       setScale(newScale * 100);
     });
+    if (initialDimensions) {
+      setScale(initialDimensions.scale);
+    }
     setImageManager(newManager);
   }, []);
 
@@ -100,7 +105,9 @@ export default function CanvasImageWindow({
         className="action-button"
         style={{ right: 0 }}
         onClick={() => {
-          setImageDimensions(imageManager.getImageSize());
+          setImageDimensions(
+            Object.assign({}, imageManager.getImageSize(), { scale: scale })
+          );
           setIsEditing(false);
         }}
       >

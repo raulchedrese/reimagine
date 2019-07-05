@@ -11,7 +11,7 @@ const getMinScale = (naturalWidth, naturalHeight) => {
 const constrainPosition = (x, min) => Math.max(Math.min(x, 0), min);
 
 export default class CommonImageWindow {
-  constructor(canvas, imageSource, imageLoadedCB) {
+  constructor(canvas, imageSource, initialDimensions, imageLoadedCB) {
     this.ctx = canvas.getContext("2d");
     // Image state
     this.imageNaturalSize = {
@@ -48,6 +48,17 @@ export default class CommonImageWindow {
         this.imageSize = {
           width: CONTAINER_WIDTH,
           height: CONTAINER_WIDTH / aspectRatio
+        };
+      }
+      console.log(initialDimensions);
+      if (initialDimensions) {
+        this.imageSize = {
+          width: initialDimensions.scaledWitdh,
+          height: initialDimensions.scaledHeight
+        };
+        this.imagePosition = {
+          x: initialDimensions.left,
+          y: initialDimensions.top
         };
       }
       imageLoadedCB();

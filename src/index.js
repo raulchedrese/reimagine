@@ -8,14 +8,7 @@ import EditIcon from "./EditIcon";
 export default function ImageCrop() {
   const [imageSource, setImageSource] = useState(null);
   const [isEditing, setIsEditing] = useState(true);
-  const [imageDimensions, setImageDimensions] = useState({
-    left: 0,
-    top: 0,
-    width: 200,
-    height: 200,
-    scaledWitdh: 200,
-    scaledHeight: 200
-  });
+  const [imageDimensions, setImageDimensions] = useState(null);
 
   if (!isEditing && imageSource !== null) {
     return (
@@ -42,6 +35,7 @@ export default function ImageCrop() {
         clearImage={() => setImageSource(null)}
         setIsEditing={setIsEditing}
         setImageDimensions={setImageDimensions}
+        initialDimensions={imageDimensions}
       />
     </div>
   );

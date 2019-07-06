@@ -1,0 +1,139 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: #2e3440;
+}
+
+.main {
+  padding: 20px;
+  color: #eceff4;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #eceff4;
+  font-weight: 200;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: 500px;
+  margin-top: 20px;
+  padding: 20px;
+  color: #2e3440;
+  background-color: #eceff4;
+  border-radius: 2px;
+}
+
+dl {
+  margin-left: 20px;
+}
+
+.image-window {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  cursor: move;
+  border-radius: 50%;
+  border: 4px solid #d8dee9;
+}
+
+.editable-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.action-button {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 10px;
+  border: 2px solid #d8dee9;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.drop-area {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 200px;
+  height: 200px;
+  color: #eceff4;
+  text-align: center;
+  border-radius: 50%;
+  border: 4px solid #d8dee9;
+  background-color: #4c566a;
+}
+
+.drop-area input {
+  display: none;
+}
+
+.drop-area--hovering {
+  background-color: #a3be8c;
+}
+
+.scale-slider {
+  margin-top: 20px;
+}
+
+#uploadInput:hover {
+  cursor: pointer;
+}
+
+input[type="range"] {
+  display: block;
+  -webkit-appearance: none;
+  background-color: #bdc3c7;
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  margin: 0 auto;
+  margin-top: 10px;
+  outline: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: #e74c3c;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  -webkit-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+​ input[type="range"]::-webkit-slider-thumb:hover {
+  background-color: white;
+  border: 2px solid #e74c3c;
+}
+input[type="range"]::-webkit-slider-thumb:active {
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
+}
+
+
+/*# sourceMappingURL=demo.54868ad0.css.map*/

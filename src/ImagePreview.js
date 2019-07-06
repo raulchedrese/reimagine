@@ -6,7 +6,6 @@ export default function ImagePreview({
   imageDimensions,
   startEditing
 }) {
-  console.log(imageDimensions);
   return (
     <div
       style={{

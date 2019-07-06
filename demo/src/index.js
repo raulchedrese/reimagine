@@ -8,10 +8,10 @@ class Demo extends Component {
   render() {
     return (
       <div className="main">
-        <h1>image-crop Demo</h1>
+        <h1>React Image Uploder</h1>
         <Example />
 
-        <div className="container">
+        {/* <div className="container">
           <Example />
           <div>
             <dl>
@@ -23,7 +23,7 @@ class Demo extends Component {
               <dd>34</dd>
             </dl>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

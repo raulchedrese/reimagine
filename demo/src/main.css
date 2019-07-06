@@ -19,6 +19,7 @@ h4,
 h5,
 h6 {
   color: #eceff4;
+  font-weight: 200;
 }
 
 .container {

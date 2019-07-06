@@ -1,0 +1,128 @@
+import { useState, useRef, useEffect } from "react";
+import React from "react";
+import CommonImageWindow from "./CommonImageWindow";
+import DeleteIcon from "./DeleteIcon";
+import SaveIcon from "./SaveIcon";
+import "./main.css";
+
+const CONTAINER_WIDTH = 200;
+const CONTAINER_HEIGHT = 200;
+
+const getMinScale = (naturalWidth: number, naturalHeight: number) => {
+  return Math.max(
+    CONTAINER_WIDTH / naturalWidth,
+    CONTAINER_HEIGHT / naturalHeight
+  );
+};
+
+type CanvasImageWindowProps = {
+  imageSource: string;
+  clearImage: any;
+  setIsEditing: any;
+  setImageDimensions: any;
+  initialDimensions: {
+    scale: number;
+  };
+};
+export default function CanvasImageWindow({
+  imageSource,
+  clearImage,
+  setIsEditing,
+  setImageDimensions,
+  initialDimensions
+}: CanvasImageWindowProps) {
+  const imageEl = useRef(null);
+  const windowEl = useRef(null);
+  const [imageManager, setImageManager] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [scale, setScale] = useState(0);
+
+  useEffect(() => {
+    const newManager = new CommonImageWindow(
+      imageEl.current,
+      imageSource,
+      initialDimensions,
+      () => {
+        setImageLoaded(true);
+      }
+    );
+    newManager.handleScale((newScale: number) => {
+      setScale(newScale * 100);
+    });
+    if (initialDimensions) {
+      setScale(initialDimensions.scale);
+    }
+    setImageManager(newManager);
+  }, []);
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        width: "208px"
+      }}
+    >
+      <div
+        ref={windowEl}
+        className="image-window"
+        style={{
+          width: `${CONTAINER_WIDTH}px`,
+          height: `${CONTAINER_HEIGHT}px`
+        }}
+        onMouseDown={event => {
+          imageManager.startPan(event);
+        }}
+        onMouseUp={event => {
+          imageManager.endPan();
+        }}
+        onMouseLeave={() => {
+          imageManager.endPan();
+        }}
+        onMouseMove={event => {
+          imageManager.pan(event);
+        }}
+      >
+        <canvas ref={imageEl} width={CONTAINER_WIDTH} height={CONTAINER_HEIGHT}>
+          Fallback
+        </canvas>
+      </div>
+      <input
+        className="scale-slider"
+        type="range"
+        min={imageManager ? imageManager.getMinScale() * 100 : 0}
+        max={100}
+        value={scale}
+        onMouseDown={e => {
+          imageManager.startScale();
+        }}
+        onMouseUp={e => {
+          imageManager.stopScale();
+        }}
+        onChange={e => {
+          imageManager.scale(parseFloat(e.target.value) / 100);
+        }}
+      />
+      <button
+        className="action-button"
+        style={{ left: 0 }}
+        onClick={() => clearImage()}
+      >
+        <DeleteIcon />
+      </button>
+      <button
+        className="action-button"
+        style={{ right: 0 }}
+        onClick={() => {
+          setImageDimensions(
+            Object.assign({}, imageManager.getImageSize(), { scale: scale })
+          );
+          setIsEditing(false);
+        }}
+      >
+        <SaveIcon />
+      </button>
+    </div>
+  );
+}

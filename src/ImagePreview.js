@@ -15,7 +15,11 @@ export default function ImagePreview({
         width: "208px"
       }}
     >
-      <button className="action-button" onClick={() => startEditing()}>
+      <button
+        className="action-button"
+        style={{ right: 0 }}
+        onClick={() => startEditing()}
+      >
         <EditIcon />
       </button>
       <div

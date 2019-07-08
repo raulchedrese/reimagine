@@ -1,17 +1,18 @@
 const CONTAINER_WIDTH = 200;
 const CONTAINER_HEIGHT = 200;
 
-const getMinScale = (naturalWidth, naturalHeight) => {
+const getMinScale = (naturalWidth: number, naturalHeight: number) => {
   return Math.max(
     CONTAINER_WIDTH / naturalWidth,
     CONTAINER_HEIGHT / naturalHeight
   );
 };
 
-const constrainPosition = (x, min) => Math.max(Math.min(x, 0), min);
+const constrainPosition = (x: number, min: number) =>
+  Math.max(Math.min(x, 0), min);
 
 export default class CommonImageWindow {
-  private ctx: CanvasRenderingContext2D;
+  private ctx: CanvasRenderingContext2D | null;
   private imageNaturalSize: {
     width: number;
     height: number;
@@ -40,9 +41,19 @@ export default class CommonImageWindow {
     x: number;
     y: number;
   };
-  private onScale: (number) => void;
+  private onScale: ((scale: number) => void) | null;
   private image: HTMLImageElement;
-  constructor(canvas, imageSource, initialDimensions, imageLoadedCB) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    imageSource: string,
+    initialDimensions: {
+      left: number;
+      top: number;
+      scaledHeight: number;
+      scaledWidth: number;
+    } | null,
+    imageLoadedCB: () => void
+  ) {
     this.ctx = canvas.getContext("2d");
     // Image state
     this.imageNaturalSize = {
@@ -84,7 +95,7 @@ export default class CommonImageWindow {
       console.log(initialDimensions);
       if (initialDimensions) {
         this.imageSize = {
-          width: initialDimensions.scaledWitdh,
+          width: initialDimensions.scaledWidth,
           height: initialDimensions.scaledHeight
         };
         this.imagePosition = {
@@ -97,11 +108,11 @@ export default class CommonImageWindow {
     };
   }
 
-  handleScale(callback) {
+  handleScale(callback: (scale: number) => void) {
     this.onScale = callback;
   }
 
-  startPan(event) {
+  startPan(event: React.MouseEvent) {
     this.isPanning = true;
     this.panStart = {
       x: event.clientX,
@@ -117,7 +128,7 @@ export default class CommonImageWindow {
     this.isPanning = false;
   }
 
-  pan(event) {
+  pan(event: React.MouseEvent) {
     if (!this.isPanning) {
       return;
     }
@@ -150,7 +161,7 @@ export default class CommonImageWindow {
     this.isScaling = false;
   }
   // factor: percentage as decimal
-  scale(factor) {
+  scale(factor: number) {
     if (
       factor < getMinScale(this.image.naturalWidth, this.image.naturalHeight)
     ) {
@@ -185,6 +196,7 @@ export default class CommonImageWindow {
     if (this.onScale !== null) {
       this.onScale(factor);
     }
+    return false;
   }
 
   getMinScale() {
@@ -206,6 +218,9 @@ export default class CommonImageWindow {
   }
 
   draw() {
+    if (!this.ctx) {
+      return;
+    }
     this.ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
     this.ctx.drawImage(
       this.image,

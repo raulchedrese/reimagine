@@ -3,7 +3,6 @@ import React from "react";
 import CommonImageWindow from "./CommonImageWindow";
 import DeleteIcon from "./DeleteIcon";
 import SaveIcon from "./SaveIcon";
-import "./main.css";
 
 const CONTAINER_WIDTH = 200;
 const CONTAINER_HEIGHT = 200;
@@ -22,7 +21,11 @@ type CanvasImageWindowProps = {
   setImageDimensions: any;
   initialDimensions: {
     scale: number;
-  };
+    left: number;
+    top: number;
+    scaledHeight: number;
+    scaledWidth: number;
+  } | null;
 };
 export default function CanvasImageWindow({
   imageSource,
@@ -31,13 +34,18 @@ export default function CanvasImageWindow({
   setImageDimensions,
   initialDimensions
 }: CanvasImageWindowProps) {
-  const imageEl = useRef(null);
+  const imageEl = useRef<HTMLCanvasElement>(null);
   const windowEl = useRef(null);
-  const [imageManager, setImageManager] = useState(null);
+  const [imageManager, setImageManager] = useState<CommonImageWindow | null>(
+    null
+  );
   const [imageLoaded, setImageLoaded] = useState(false);
   const [scale, setScale] = useState(0);
 
   useEffect(() => {
+    if (!imageEl.current) {
+      return;
+    }
     const newManager = new CommonImageWindow(
       imageEl.current,
       imageSource,
@@ -72,15 +80,27 @@ export default function CanvasImageWindow({
           height: `${CONTAINER_HEIGHT}px`
         }}
         onMouseDown={event => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.startPan(event);
         }}
         onMouseUp={event => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.endPan();
         }}
         onMouseLeave={() => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.endPan();
         }}
         onMouseMove={event => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.pan(event);
         }}
       >
@@ -95,12 +115,21 @@ export default function CanvasImageWindow({
         max={100}
         value={scale}
         onMouseDown={e => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.startScale();
         }}
         onMouseUp={e => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.stopScale();
         }}
         onChange={e => {
+          if (!imageManager) {
+            return;
+          }
           imageManager.scale(parseFloat(e.target.value) / 100);
         }}
       />
@@ -115,6 +144,9 @@ export default function CanvasImageWindow({
         className="action-button"
         style={{ right: 0 }}
         onClick={() => {
+          if (!imageManager) {
+            return;
+          }
           setImageDimensions(
             Object.assign({}, imageManager.getImageSize(), { scale: scale })
           );

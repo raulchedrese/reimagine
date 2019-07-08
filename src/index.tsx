@@ -6,11 +6,17 @@ import ImagePreview from "./ImagePreview";
 import EditIcon from "./EditIcon";
 
 export default function ImageCrop() {
-  const [imageSource, setImageSource] = useState(null);
+  const [imageSource, setImageSource] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(true);
-  const [imageDimensions, setImageDimensions] = useState(null);
+  const [imageDimensions, setImageDimensions] = useState<{
+    scale: number;
+    left: number;
+    top: number;
+    scaledHeight: number;
+    scaledWidth: number;
+  } | null>(null);
 
-  if (!isEditing && imageSource !== null) {
+  if (!isEditing && imageSource !== null && imageDimensions !== null) {
     return (
       <ImagePreview
         imageSource={imageSource}

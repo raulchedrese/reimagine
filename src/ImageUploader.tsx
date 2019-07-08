@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 
-const createFileURL = file => window.URL.createObjectURL(file);
+const createFileURL = (file: File) => window.URL.createObjectURL(file);
 
-const sendData = file => {
+const sendData = (file: File) => {
   let formData = new FormData();
   formData.append("image_upload[image]", file);
 
@@ -12,11 +12,14 @@ const sendData = file => {
   });
 };
 
-export default function ImageUploader({ setImageSource }) {
-  const fileInput = useRef(null);
+export default function ImageUploader({ setImageSource }: any) {
+  const fileInput = useRef<HTMLInputElement | null>(null);
   const [isHovering, setIsHovering] = useState(false);
 
   const handleImageChange = () => {
+    if (!fileInput.current || !fileInput.current.files) {
+      return;
+    }
     sendData(fileInput.current.files[0]);
     setImageSource(createFileURL(fileInput.current.files[0]));
   };

@@ -11,7 +11,7 @@
     "umd"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "rollup --config rollup.config.js"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -19,8 +19,11 @@
   },
   "devDependencies": {
     "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.8.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "rollup": "^1.16.6",
+    "rollup-plugin-typescript2": "^0.21.2",
     "typescript": "^3.5.2"
   },
   "author": "",

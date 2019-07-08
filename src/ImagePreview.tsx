@@ -1,11 +1,22 @@
 import React from "react";
 import EditIcon from "./EditIcon";
 
+type ImagePreviewProps = {
+  imageSource: string;
+  imageDimensions: {
+    scale: number;
+    left: number;
+    top: number;
+    scaledHeight: number;
+    scaledWidth: number;
+  };
+  startEditing: () => void;
+};
 export default function ImagePreview({
   imageSource,
   imageDimensions,
   startEditing
-}) {
+}: ImagePreviewProps) {
   return (
     <div
       style={{

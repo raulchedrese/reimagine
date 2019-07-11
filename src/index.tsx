@@ -33,7 +33,6 @@ export default function ImageCrop() {
       </div>
     );
   }
-
   return (
     <div>
       <CanvasImageWindow

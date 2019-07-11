@@ -92,7 +92,6 @@ export default class CommonImageWindow {
           height: CONTAINER_WIDTH / aspectRatio
         };
       }
-      console.log(initialDimensions);
       if (initialDimensions) {
         this.imageSize = {
           width: initialDimensions.scaledWidth,
@@ -103,6 +102,7 @@ export default class CommonImageWindow {
           y: initialDimensions.top
         };
       }
+
       imageLoadedCB();
       this.draw();
     };
@@ -212,7 +212,7 @@ export default class CommonImageWindow {
       top: this.imagePosition.y,
       width: CONTAINER_WIDTH,
       height: CONTAINER_HEIGHT,
-      scaledWitdh: this.imageSize.width,
+      scaledWidth: this.imageSize.width,
       scaledHeight: this.imageSize.height
     };
   }
@@ -221,6 +221,7 @@ export default class CommonImageWindow {
     if (!this.ctx) {
       return;
     }
+
     this.ctx.clearRect(0, 0, CONTAINER_WIDTH, CONTAINER_HEIGHT);
     this.ctx.drawImage(
       this.image,

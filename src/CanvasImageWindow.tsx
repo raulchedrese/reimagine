@@ -34,14 +34,13 @@ export default function CanvasImageWindow({
   setImageDimensions,
   initialDimensions
 }: CanvasImageWindowProps) {
-  const imageEl = useRef<HTMLCanvasElement>(null);
+  const imageEl = useRef<HTMLCanvasElement | any>(null);
   const windowEl = useRef(null);
   const [imageManager, setImageManager] = useState<CommonImageWindow | null>(
     null
   );
   const [imageLoaded, setImageLoaded] = useState(false);
   const [scale, setScale] = useState(0);
-
   useEffect(() => {
     if (!imageEl.current) {
       return;

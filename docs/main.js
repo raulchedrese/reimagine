@@ -100,7 +100,6 @@
                       height: CONTAINER_WIDTH / aspectRatio
                   };
               }
-              console.log(initialDimensions);
               if (initialDimensions) {
                   _this.imageSize = {
                       width: initialDimensions.scaledWidth,
@@ -189,7 +188,7 @@
               top: this.imagePosition.y,
               width: CONTAINER_WIDTH,
               height: CONTAINER_HEIGHT,
-              scaledWitdh: this.imageSize.width,
+              scaledWidth: this.imageSize.width,
               scaledHeight: this.imageSize.height
           };
       };

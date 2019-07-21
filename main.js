@@ -341,7 +341,10 @@
               React__default.createElement(ImageUploader, { setImageSource: setImageSource })));
       }
       return (React__default.createElement("div", null,
-          React__default.createElement(CanvasImageWindow, { imageSource: imageSource, clearImage: function () { return setImageSource(null); }, setIsEditing: setIsEditing, setImageDimensions: setImageDimensions, initialDimensions: imageDimensions })));
+          React__default.createElement(CanvasImageWindow, { imageSource: imageSource, clearImage: function () {
+                  setImageSource(null);
+                  setImageDimensions(null);
+              }, setIsEditing: setIsEditing, setImageDimensions: setImageDimensions, initialDimensions: imageDimensions })));
   }
 
   return ImageCrop;

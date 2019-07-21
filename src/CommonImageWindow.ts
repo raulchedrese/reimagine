@@ -1,3 +1,5 @@
+import { number } from "prop-types";
+
 const CONTAINER_WIDTH = 200;
 const CONTAINER_HEIGHT = 200;
 
@@ -11,36 +13,31 @@ const getMinScale = (naturalWidth: number, naturalHeight: number) => {
 const constrainPosition = (x: number, min: number) =>
   Math.max(Math.min(x, 0), min);
 
+type Rect = {
+  width: number;
+  height: number;
+};
+
+type Point = {
+  x: number;
+  y: number;
+};
+
 export default class CommonImageWindow {
   private ctx: CanvasRenderingContext2D | null;
-  private imageNaturalSize: {
-    width: number;
-    height: number;
-  };
-  private imageSize: {
-    width: number;
-    height: number;
-  };
-  private imagePosition: {
-    x: number;
-    y: number;
-  };
+  private imageNaturalSize: Rect;
+  private imageSize: Rect;
+  private imagePosition: Point;
   private isPanning: boolean;
   private isScaling: boolean;
-  private panStart: {
-    x: number;
-    y: number;
-  };
+  private panStart: Point;
   private scaleStart: {
     width: number;
     height: number;
     x: number;
     y: number;
   };
-  private imagePositionStart: {
-    x: number;
-    y: number;
-  };
+  private imagePositionStart: Point;
   private onScale: ((scale: number) => void) | null;
   private image: HTMLImageElement;
   constructor(

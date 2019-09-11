@@ -7,8 +7,8 @@ export default [
     input: "src/index.tsx",
     output: {
       format: "umd",
-      name: "main",
-      file: "main.js"
+      name: "index",
+      file: "index.js"
     },
     plugins: [typescript()]
   },

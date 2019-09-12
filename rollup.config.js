@@ -8,7 +8,16 @@ export default [
     output: {
       format: "umd",
       name: "index",
-      file: "index.js"
+      file: "lib/index.js"
+    },
+    plugins: [typescript()]
+  },
+  {
+    input: "src/index.tsx",
+    output: {
+      format: "esm",
+      name: "index",
+      file: "es/index.js"
     },
     plugins: [typescript()]
   },

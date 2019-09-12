@@ -10,6 +10,9 @@ or
 
 `yarn add reimagine`
 
+## Example
+https://codesandbox.io/s/hungry-mayer-5q5sl?fontsize=14
+
 ## Usage
 
 ```javascript

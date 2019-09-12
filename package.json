@@ -1,6 +1,6 @@
 {
   "name": "reimagine",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "description": "Simple React image uploader.",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -31,9 +31,9 @@
     "typescript": "^3.5.2"
   },
   "author": "",
-  "homepage": "",
+  "homepage": "https://github.com/raulchedrese/reimagine",
   "license": "MIT",
-  "repository": "",
+  "repository": "https://github.com/raulchedrese/reimagine",
   "keywords": [
     "react-component",
     "image",

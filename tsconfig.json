@@ -28,7 +28,9 @@
     "src/setupTests.ts",
     "rollup.config.js",
     "index.js",
-    "docs/"
+    "docs/",
+    "es/",
+    "lib/"
   ],
   "types": [
     "typePatches"

@@ -361,7 +361,6 @@
   }
 
   var saveImageEdit = function (imageId, dimensions) {
-      console.log(JSON.stringify(dimensions));
       fetch("https://apipond.com/image_uploads/" + imageId, {
           method: 'put',
           body: JSON.stringify(dimensions)

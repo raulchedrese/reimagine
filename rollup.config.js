@@ -1,5 +1,4 @@
 import typescript from "rollup-plugin-typescript2";
-import pkg from "./package.json";
 
 export default [
   // browser-friendly UMD build
@@ -8,18 +7,18 @@ export default [
     output: {
       format: "umd",
       name: "index",
-      file: "lib/index.js"
+      file: "lib/index.js",
     },
-    plugins: [typescript()]
+    plugins: [typescript()],
   },
   {
     input: "src/index.tsx",
     output: {
       format: "esm",
       name: "index",
-      file: "es/index.js"
+      file: "es/index.js",
     },
-    plugins: [typescript()]
+    plugins: [typescript()],
   },
   {
     input: "src/demo.tsx",
@@ -27,8 +26,8 @@ export default [
       format: "umd",
       name: "main",
       file: "docs/main.js",
-      sourcemap: true
+      sourcemap: true,
     },
-    plugins: [typescript()]
-  }
+    plugins: [typescript()],
+  },
 ];

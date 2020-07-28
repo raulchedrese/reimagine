@@ -3,10 +3,7 @@
     "outDir": "build/dist",
     "module": "ES2015",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": ["es7", "dom"],
     "sourceMap": true,
     "declaration": true,
     "jsx": "react",
@@ -32,7 +29,5 @@
     "es/",
     "lib/"
   ],
-  "types": [
-    "typePatches"
-  ]
+  "types": ["typePatches"]
 }

@@ -4,5 +4,5 @@ declare type ImageUploaderProps = {
     width: number;
     height: number;
 };
-export default function ImageUploader({ setImageSource, width, height }: ImageUploaderProps): JSX.Element;
+export default function ImageUploader({ setImageSource, width, height, }: ImageUploaderProps): JSX.Element;
 export {};

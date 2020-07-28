@@ -4,21 +4,37 @@ function ImageUploader(_a) {
     var setImageSource = _a.setImageSource, width = _a.width, height = _a.height;
     var fileInput = useRef(null);
     var _b = useState(false), isHovering = _b[0], setIsHovering = _b[1];
+    var _c = useState(null), error = _c[0], setError = _c[1];
     var handleImageChange = function () {
         if (!fileInput.current || !fileInput.current.files) {
             return;
         }
-        setImageSource(fileInput.current.files[0]);
+        setImage(fileInput.current.files[0]);
+    };
+    var setImage = function (imageFile) {
+        if (validateFormat(imageFile.type)) {
+            setImageSource(imageFile);
+        }
+        else {
+            setError("Unsupported file type. Use JPEG or PNG.");
+            setTimeout(function () {
+                setError("");
+                setIsHovering(false);
+            }, 3000);
+        }
     };
     var classes = "drop-area";
     if (isHovering) {
         classes += " drop-area--hovering";
     }
+    if (error) {
+        classes += " drop-area--error";
+    }
     return (React.createElement("div", null,
         React.createElement("div", { className: classes, style: { width: width + "px", height: height + "px" }, onDrop: function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                setImageSource(e.dataTransfer.files[0]);
+                setImage(e.dataTransfer.files[0]);
             }, onDragEnter: function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -32,9 +48,12 @@ function ImageUploader(_a) {
                 e.stopPropagation();
                 setIsHovering(false);
             } },
-            React.createElement("label", { htmlFor: "uploadInput" }, "Drop an image or click"),
+            error ? (React.createElement("div", null, error)) : (React.createElement("label", { className: "uploader__label", htmlFor: "uploadInput" }, "Drop an image or click")),
             React.createElement("input", { id: "uploadInput", ref: fileInput, onChange: handleImageChange, type: "file" }))));
 }
+var validateFormat = function (file) {
+    return ["image/jpeg", "image/png"].includes(file);
+};
 
 var constrainPosition = function (x, min) {
     return Math.max(Math.min(x, 0), min);

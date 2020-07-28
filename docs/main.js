@@ -1,31 +1,47 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('react'), require('react-dom')) :
   typeof define === 'function' && define.amd ? define(['react', 'react-dom'], factory) :
-  (global = global || self, global.main = factory(global.React, global.ReactDOM));
-}(this, function (React, ReactDOM) { 'use strict';
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.main = factory(global.React, global.ReactDOM));
+}(this, (function (React, ReactDOM) { 'use strict';
 
   var React__default = 'default' in React ? React['default'] : React;
-  ReactDOM = ReactDOM && ReactDOM.hasOwnProperty('default') ? ReactDOM['default'] : ReactDOM;
+  ReactDOM = ReactDOM && Object.prototype.hasOwnProperty.call(ReactDOM, 'default') ? ReactDOM['default'] : ReactDOM;
 
   function ImageUploader(_a) {
       var setImageSource = _a.setImageSource, width = _a.width, height = _a.height;
       var fileInput = React.useRef(null);
       var _b = React.useState(false), isHovering = _b[0], setIsHovering = _b[1];
+      var _c = React.useState(null), error = _c[0], setError = _c[1];
       var handleImageChange = function () {
           if (!fileInput.current || !fileInput.current.files) {
               return;
           }
-          setImageSource(fileInput.current.files[0]);
+          setImage(fileInput.current.files[0]);
+      };
+      var setImage = function (imageFile) {
+          if (validateFormat(imageFile.type)) {
+              setImageSource(imageFile);
+          }
+          else {
+              setError("Unsupported file type. Use JPEG or PNG.");
+              setTimeout(function () {
+                  setError("");
+                  setIsHovering(false);
+              }, 3000);
+          }
       };
       var classes = "drop-area";
       if (isHovering) {
           classes += " drop-area--hovering";
       }
+      if (error) {
+          classes += " drop-area--error";
+      }
       return (React__default.createElement("div", null,
           React__default.createElement("div", { className: classes, style: { width: width + "px", height: height + "px" }, onDrop: function (e) {
                   e.preventDefault();
                   e.stopPropagation();
-                  setImageSource(e.dataTransfer.files[0]);
+                  setImage(e.dataTransfer.files[0]);
               }, onDragEnter: function (e) {
                   e.preventDefault();
                   e.stopPropagation();
@@ -39,9 +55,12 @@
                   e.stopPropagation();
                   setIsHovering(false);
               } },
-              React__default.createElement("label", { htmlFor: "uploadInput" }, "Drop an image or click"),
+              error ? (React__default.createElement("div", null, error)) : (React__default.createElement("label", { className: "uploader__label", htmlFor: "uploadInput" }, "Drop an image or click")),
               React__default.createElement("input", { id: "uploadInput", ref: fileInput, onChange: handleImageChange, type: "file" }))));
   }
+  var validateFormat = function (file) {
+      return ["image/jpeg", "image/png"].includes(file);
+  };
 
   var constrainPosition = function (x, min) {
       return Math.max(Math.min(x, 0), min);
@@ -389,5 +408,5 @@
 
   return DemoComponent;
 
-}));
+})));
 //# sourceMappingURL=main.js.map

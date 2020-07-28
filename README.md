@@ -11,7 +11,7 @@ or
 `yarn add reimagine`
 
 ## Example
-https://codesandbox.io/s/hungry-mayer-5q5sl?fontsize=14
+https://codesandbox.io/s/friendly-wave-ix61j
 
 ## Usage
 
